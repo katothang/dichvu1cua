@@ -1,0 +1,52 @@
+﻿@model DichVuMotCua.Models.taikhoan
+@using (Ajax.BeginForm("Login", "Account", new { ReturnUrl = Request.Url.AbsoluteUri },
+                                            new AjaxOptions
+                                            {
+                                                HttpMethod = "POST",
+                                                OnBegin = "myLoginBegin",
+                                                OnSuccess = "myLoginEnd"
+                                            }, new { role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal fade" id="loginModal" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content _modalContent">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title _colorWhite" id="exampleModalLabel">Đăng Nhập</h4>
+                </div>
+                <div class="modal-body _bgWhite">
+                    <div class="form-group" style="margin-bottom: 10px !important;">
+                        <span id="_messageLogin" class="text-danger col-md-offset-3">
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.email, new { @class = "col-md-3 control-label" })
+                        @Html.TextBoxFor(m => m.email, new { @class = "form-control", @id = "login_username", @placeholder = "Email" })
+                        @Html.ValidationMessageFor(m => m.email, "", new { @class = "text-danger col-md-offset-3" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.password, new { @class = "col-md-3 control-label" })
+                        @Html.PasswordFor(m => m.password, new { @class = "form-control", @id = "password", @placeholder = "Password" })
+                        @Html.ValidationMessageFor(m => m.password, "", new { @class = "text-danger col-md-offset-3" })
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox col-md-offset-3">
+                            @*@Html.CheckBoxFor(m => m.RememberMe)
+                            @Html.LabelFor(m => m.RememberMe)*@
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-3">
+                            <input type="submit" value="Đăng nhập" id="login_btn" class="btn btn-success" />
+                            <button type="button" id="_loadingBtnLogin" class="btn btn-success"><span class="glyphicon glyphicon-refresh spinning"></span>Xin chờ...</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                        </div>
+
+                        <a class="_links" href="~/Account/ForgotPassword">Lấy lại mật khẩu ?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

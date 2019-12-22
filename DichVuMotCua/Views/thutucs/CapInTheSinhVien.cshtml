@@ -1,0 +1,110 @@
+﻿@model DichVuMotCua.Models.thutuc
+
+@{
+    ViewBag.Title = "CapInTheSinhVien";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<body>
+    <div class="wrapper">
+        <!-- Page Content Holder -->
+        <div id="content">
+            @Html.Partial("menubar")
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+
+                    <div class="navbar-header">
+                        <button type="button" id="sidebarCollapse" class="navbar-btn">
+                            <span>
+                                <i class="glyphicon glyphicon-align-left"></i>
+                                <span>MENU</span>
+                            </span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
+
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        @Html.Partial("_LoginPartial")
+                    </div>
+                </div>
+            </nav>
+            <h2>Cấp In Thẻ Sinh Viên</h2>
+
+
+            @using (Html.BeginForm("CapInTheSinhVien",
+      "thutucs",
+      FormMethod.Post,
+      new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <label class="control-label col-md-2" for="tenthutuc">Tiêu Đề</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            @if (ViewBag.chitietthutuc != null)
+            {
+                for (int i = 0; i < ViewBag.chitietthutuc.Count; i++)
+                {
+                    ViewBag.thongtinthutuc = "thutuc" + i;
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="name">@ViewBag.chitietthutuc[i].name</label>
+                        <div class="col-md-10">
+                            <input class="form-control text-box single-line" data-val="true" data-val-length="The field name must be a string with a maximum length of 255." data-val-length-max="255" id="@ViewBag.thongtinthutuc" name="@ViewBag.thongtinthutuc" type="text" value="" />
+                            <span class="field-validation-valid text-danger" data-valmsg-for="name" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                }
+            }
+            <div class="form-group">
+                <label class="control-label col-md-2" for="anh">Upload file thông tin sinh viên</label>
+                <div class="col-md-10">
+                    <input type="file" name="file" id="file" /><br><br>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Submit" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+            }
+
+            <div>
+                @Html.ActionLink("Trở Lại", "Index")
+            </div>
+
+            @section Scripts {
+                @Scripts.Render("~/bundles/jqueryval")
+            }
+
+        </div>
+    </div>
+
+
+
+
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Bootstrap Js CDN -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+        });
+    </script>
+</body>

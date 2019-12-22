@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Collapsible sidebar using Bootstrap 3</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="~/Content/style2.css">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+
+</head>
+<body>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+    </div>
+    @{
+
+        try
+        {
+            @Html.Partial("_LoginLayout", null)
+            @Html.Partial("_RegisterLayout", null)
+        }
+        catch
+        {
+
+        }
+    }
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/ajax")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        $("#_loadingBtnLogin").hide();
+        $("#_loadingBtnRegister").hide();
+        $("#error_msg").hide();
+    });
+    // Login
+    function myLoginBegin() {
+        $("#login_btn").hide();
+        $('#_loadingBtnLogin').prop('disabled', true);
+        $("#_loadingBtnLogin").show();
+        $("#error_msg").hide();
+    }
+    function myLoginEnd(response) {
+        if (response == true) {
+            window.location.href = "/Home/Index";
+        }
+        else if (response == "error") {
+            $("#_loadingBtnLogin").hide();
+            $("#login_btn").show();
+            $('.bt-login').prop('disabled', false);
+            $("#error_msg").show();
+            $("#_messageLogin").html("Đăng nhập thất bại vui lòng kiểm tra lại tài khoản và mật khẩu");
+        }
+        else if (response == "verify") {
+            $("#_loadingBtnLogin").hide();
+            $("#login_btn").show();
+            $('.bt-login').prop('disabled', false);
+            $("#error_msg").show();
+            $("#_messageLogin").html("tài khoản chưa được xác nhận vui lòng xác nhận tài khoản");
+        }
+        else {
+            $("#_loadingBtnLogin").hide();
+            $("#login_btn").show();
+            window.location.href = response;
+        }
+    }
+    //Login end
+
+    //SignUp
+    function onBeginSignUp() {
+        $('#_loadingBtnRegister').prop('disabled', true);
+        $("#_loadingBtnRegister").show();
+        $("#register_btn").hide();
+        $("#signUpMsg").hide();
+        $('#register_btn').addClass('active');
+        $('#register_btn').prop('disabled', true);
+    }
+
+    function OnSignUp(response) {
+        if (response == true) {
+            $("#_loadingBtnRegister").hide();
+            $("#register_btn").show();
+            $('#register_btn').prop('disabled', true);
+            $("#signUpMsg").css("color", "#27ae60");
+            $("#signUpMsg").css("display", "block");
+            $("#signUpMsg").html("đăng kí thành công vui lòng check email ");
+            $("#signUpMsg").show();
+        }
+        else if (response == false) {
+            $("#_loadingBtnRegister").hide();
+            $("#signUpMsg").show();
+            $("#register_btn").show();
+            $("#signUpMsg").css("display", "block");
+            $("#signUpMsg").html("lỗi vui lòng kiểm tra lại.");
+            $("#loadImgSignUp").empty();
+            $('#register_btn').prop('disabled', false);
+        }
+        else {
+            $("#_loadingBtnRegister").hide();
+            $("#signUpMsg").show();
+            $("#signUpMsg").css("display", "block");
+            $("#register_btn").show();
+            $("#signUpMsg").html(response[0]);
+            $('#register_btn').prop('disabled', false);
+        }
+    }
+    //SignUp end
+
+    $("#RegisterModal").on("hidden.bs.modal", function () {
+        $(".field-validation-error").html("");;
+        $("#email").val("");
+        $("#regPassword").val("");
+        $("#cpassword").val("");
+        $("#_loadingBtnRegister").hide();
+        $("#register_btn").show();
+        $("#signUpMsg").html("");
+        $('#register_btn').prop('disabled', false);
+    });
+    $("#loginModal").on("hidden.bs.modal", function () {
+        $(".field-validation-error").html("");
+        $("#login_username").val("");
+        $("#password").val("");
+        $("#_loadingBtnLogin").hide();
+        $("#_messageLogin").html("");
+        $("#login_btn").show();
+        $('#login_btn').prop('disabled', false);
+    });
+</script>
